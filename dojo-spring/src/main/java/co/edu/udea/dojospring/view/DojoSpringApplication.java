@@ -1,9 +1,11 @@
-package co.edu.udea.dojospring;
+package co.edu.udea.dojospring.view;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class DojoSpringApplication {
 
 	public static void main(String[] args) {
