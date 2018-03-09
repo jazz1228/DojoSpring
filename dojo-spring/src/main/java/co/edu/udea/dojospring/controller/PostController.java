@@ -2,56 +2,65 @@ package co.edu.udea.dojospring.controller;
 
 
 import co.edu.udea.dojospring.exception.ResourceNotFoundException;
-import co.edu.udea.dojospring.model.Poster;
-import co.edu.udea.dojospring.repository.PosterRepository;
+import co.edu.udea.dojospring.model.Post;
+import co.edu.udea.dojospring.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-public class PosterDAO{
+public class PostController{
 
     @Autowired
-    PosterRepository post;
+    PostRepository post;
 
 
-    @GetMapping("/post")
-    public List<Poster> getAllPoster(){
+    @GetMapping("/allPosts")
+    public String allPostsView(Map<String, Object> model) {
+        model.put("posts", post.findAll());
+        return "posts";
+    }
+
+    @GetMapping("/posts")
+    public List<Post> getAllPost(){
         return post.findAll();
     }
 
     @PostMapping("/post")
-    public Poster createPost(@Valid @RequestBody Poster post) {
+    public Post createPost(@Valid @RequestBody Post post) {
         return this.post.save(post);
     }
 
     @GetMapping("/post/{id}")
-    public Poster getPostById(@PathVariable(value = "id") Long postId) {
+    public Post getPostById(@PathVariable(value = "id") Long postId) {
         return post.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
     }
 
     @PutMapping("/post/{id}")
-    public Poster updatePost(@PathVariable(value = "id") Long postId,
-                           @Valid @RequestBody Poster postDetails) {
+    public Post updatePost(@PathVariable(value = "id") Long postId,
+                           @Valid @RequestBody Post postDetails) {
 
-        Poster postNote = post.findById(postId)
+        Post postNote = post.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
 
         postNote.setTitle(postDetails.getTitle());
         postNote.setContent(postDetails.getContent());
 
-        Poster updatedPost = post.save(postNote);
+        Post updatedPost = post.save(postNote);
         return updatedPost;
     }
 
     @DeleteMapping("/post/{id}")
     public ResponseEntity<?> deletePost(@PathVariable(value = "id") Long postId) {
-        Poster post = this.post.findById(postId)
+        Post post = this.post.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
 
         this.post.delete(post);

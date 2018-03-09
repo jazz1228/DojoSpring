@@ -11,11 +11,11 @@ import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
-@Table(name = "poster")
+@Table(name = "post")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"},
         allowGetters = true)
-public class Poster {
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
